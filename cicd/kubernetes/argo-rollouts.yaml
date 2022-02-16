@@ -18,10 +18,10 @@ spec:
           image: vcixoe45.private-ncr.gov-ntruss.com/userservice-demo:latest
           env:
           - name: SPRING_PROFILE
-            value: "prd"
-          imagePullPolicy: Always
+            value: prd
           ports:
             - containerPort: 8080
+          imagePullPolicy: Always
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -35,6 +35,6 @@ spec:
         - name: alertnow-docker-rego-secret
   strategy:
     blueGreen:
-      activeService: userservice-backend-demo-active
-      previewService: userservice-backend-demo-preview
+      activeService: userservice-demo-active
+      previewService: userservice-demo-preview
       autoPromotionEnabled: false
