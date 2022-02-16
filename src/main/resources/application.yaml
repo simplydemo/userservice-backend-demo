@@ -53,7 +53,7 @@ spring:
       on-profile: prd
   datasource:
     driver-class-name: "com.mysql.cj.jdbc.Driver"
-    url: "jdbc:mysql://localhost:53306/SAMPLE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
+    url: "jdbc:mysql://db-t32q-kr1.vpc-cdb.gov-ntruss.com:3306/SAMPLE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
     username: scott
     password: tiger123$
     hibernate:
@@ -66,3 +66,9 @@ spring:
   jpa:
     database: mysql
     database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
+logging:
+  file:
+    name: "/tmp/apps/spring-app.log"
+  logback:
+    rollingpolicy:
+      max-history: 7

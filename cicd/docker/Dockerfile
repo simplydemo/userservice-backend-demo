@@ -11,8 +11,10 @@ USER spring:spring
 # Copy over the different layers of the .jar
 COPY ./target/*.jar /apps/spring-app.jar
 
+ENV	SPRING_PROFILE default
 ENV JAVA_OPTS="-Xverify:none"
 ENV JAVA_OPTS="$JAVA_OPTS -Dsun.misc.URLClassPath.disableJarChecking=true"
 
 EXPOSE 8080
-ENTRYPOINT exec java $JAVA_OPTS -jar spring-app.jar
+
+ENTRYPOINT exec java $JAVA_OPTS -Dspring.profiles.active=${SPRING_PROFILE} -jar spring-app.jar
