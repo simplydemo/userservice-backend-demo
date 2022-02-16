@@ -1,0 +1,22 @@
+version: "3"
+
+networks:
+  runtime-net:
+    external: false
+
+volumes:
+  hostdir:
+    driver: local
+
+services:
+  userservice:
+    image: userservice-demo:1.0
+    container_name: userservice
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - runtime-net
+
+# docker-compose up userservice
+#  curl -v http://localhost:8080/api/users/query
