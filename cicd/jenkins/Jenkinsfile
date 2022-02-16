@@ -2,11 +2,11 @@ pipeline {
     agent none
     environment {
         PROFILE='gov'
-        GIT_REPO_URL='ssh://git@code.bespinglobal.com/lab1a/lightsaber-incident-svc.git'
-        GIT_REPO_BRANCH_NAME='master-gov'
+        GIT_REPO_URL='https://github.com/chiwoo-samples/userservice-backend-demo.git'
+        GIT_REPO_BRANCH_NAME='main'
         DOCKER_REGISTRY_PRIVATE='vcixoe45.private-ncr.gov-ntruss.com'
         DOCKER_REGISTRY='alertnow-image-repo.ncr.gov-ntruss.com'
-        IMAGE_NAME='alertnow-incidentapi'
+        IMAGE_NAME='userservice-backend-demo'
     }
     options {
         timestamps()
@@ -20,17 +20,17 @@ pipeline {
                 checkout(
                     [$class: 'GitSCM', branches: [[name: '*/' + env.GIT_REPO_BRANCH_NAME]],
                     extensions: [],
-                    userRemoteConfigs: [[credentialsId: 'gov-bitbucket-credential', url: env.GIT_REPO_URL]]]
+                    userRemoteConfigs: [[credentialsId: 'github-credentials', url: env.GIT_REPO_URL]]]
                 )
                 sh 'ls -Al'
             }
         }
 
         stage('build-mvn') {
-            agent { docker { image 'maven:3-jdk-8-alpine' } }
+            agent { docker { image 'adoptopenjdk/openjdk11:alpine-slim' } }
             steps {
-                configFileProvider([configFile(fileId: 'finops-nexus-jar-reuse', variable: 'MAVEN_SETTINGS')]) {
-                    sh 'mvn clean package -DskipTests=true -s ${MAVEN_SETTINGS} -P ${PROFILE}'
+                configFileProvider([configFile(fileId: 'default-nexus', variable: 'MAVEN_SETTINGS')]) {
+                    sh 'mvn clean package -DskipTests=true -s ${MAVEN_SETTINGS}'
                     sh 'ls -Al'
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
         stage('build-docker-image') {
             agent { label 'finops-jenkins' }
             steps {
-                sh 'docker build -f ./cicd/gov/docker/Dockerfile -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest .'
+                sh 'docker build -f ./cicd/docker/Dockerfile -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest .'
             }
         }
 

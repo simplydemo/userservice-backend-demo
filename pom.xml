@@ -76,6 +76,20 @@
         </dependency>
     </dependencies>
 
+
+    <profiles>
+        <profile>
+            <id>gov</id>
+            <properties>
+                <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+                <!--
+                <sonar.host.url>https://sonarqube.fin.opsnow.com</sonar.host.url>
+                <nexus.host.url>https://nexus.fin.opsnow.com</nexus.host.url>
+                -->
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
