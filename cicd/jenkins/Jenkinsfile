@@ -30,7 +30,7 @@ pipeline {
             agent { docker { image 'adoptopenjdk/openjdk11:alpine-slim' } }
             steps {
                 configFileProvider([configFile(fileId: 'default-nexus', variable: 'MAVEN_SETTINGS')]) {
-                    sh 'mvn clean package -DskipTests=true -s ${MAVEN_SETTINGS}'
+                    sh 'mvn clean package -DskipTests=true -s ${MAVEN_SETTINGS} -P ${PROFILE}'
                     sh 'ls -Al'
                 }
             }
