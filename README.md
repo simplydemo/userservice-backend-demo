@@ -99,7 +99,6 @@ docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
 mvn clean package -DskipTests=true
 
 docker build -t "userservice-demo:1.0" -f ./cicd/docker/Dockerfile .
-```
 
 ### Docker Service UP
 ```
