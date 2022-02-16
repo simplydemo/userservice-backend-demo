@@ -1,4 +1,4 @@
-package com.demo.backend.entity
+package example.demo.backend.entity
 
 import java.time.LocalDateTime
 import javax.persistence.*

@@ -1,7 +1,7 @@
-package com.demo.backend.api
+package example.demo.backend.api
 
-import com.demo.backend.entity.User
-import com.demo.backend.service.UserService
+import example.demo.backend.entity.User
+import example.demo.backend.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

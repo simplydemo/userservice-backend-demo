@@ -1,7 +1,7 @@
-package com.demo.backend.api
+package example.demo.backend.api
 
-import com.demo.backend.entity.User
-import com.demo.backend.service.UserService
+import example.demo.backend.entity.User
+import example.demo.backend.service.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every

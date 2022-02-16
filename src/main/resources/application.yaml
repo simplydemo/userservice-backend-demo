@@ -6,7 +6,7 @@ server:
 logging:
   level:
     root: INFO
-    com.demo.backend: DEBUG
+    example.demo.backend: DEBUG
     org.springframework.web: INFO
     org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE
     org.springframework.kafka: TRACE
@@ -20,7 +20,7 @@ logging:
 
 spring:
   application:
-    name: backend
+    name: userservice
   jackson:
     serialization:
       INDENT_OUTPUT: true
@@ -31,36 +31,38 @@ spring:
       - non_default
       - non_empty
   datasource:
-    # url: "jdbc:h2:file:/tmp/data/demo"
-    # url: "jdbc:h2:tcp://localhost/~/demo"
-    # url: "jdbc:h2:file:~/demo;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE"
-    url: "jdbc:h2:mem:demo"
-    driver-class-name: "org.h2.Driver"
-    username: sa
-    hikari:
-      auto-commit: false
-      connection-init-sql: "select 1"
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:53306/SAMPLE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
+    username: scott
+    password: tiger123$
+    hibernate:
+      ddl-auto: none
   sql:
     init:
       mode: always
-      schema-locations: "classpath:sql/schema.sql"
+      schema-locations: "classpath:sql/schema-mysql.sql"
       data-locations: "classpath:sql/data.sql"
   jpa:
-    database-platform: "org.hibernate.dialect.H2Dialect"
-    hibernate:
-      ddl-auto: none
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
+    database: mysql
+    database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
 
 ---
 spring:
   config:
     activate:
-      on-profile: dev
-#  spring.jackson.default-property-inclusion=always, non_null, non_absent, non_default, non_empty
+      on-profile: prd
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: "jdbc:mysql://localhost:53306/SAMPLE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
+    username: scott
+    password: tiger123$
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      schema-locations: "classpath:sql/schema-mysql.sql"
+      data-locations: "classpath:sql/data.sql"
+  jpa:
+    database: mysql
+    database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"

@@ -1,6 +1,6 @@
-package com.demo.backend.repository
+package example.demo.backend.repository
 
-import com.demo.backend.entity.User
+import example.demo.backend.entity.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

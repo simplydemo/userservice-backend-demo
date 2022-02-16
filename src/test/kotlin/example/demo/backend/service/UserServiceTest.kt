@@ -1,6 +1,6 @@
-package com.demo.backend.service
+package example.demo.backend.service
 
-import com.demo.backend.entity.User
+import example.demo.backend.entity.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.MethodOrderer

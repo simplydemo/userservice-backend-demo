@@ -3,33 +3,25 @@ Backend combines components such as kotlin, spring-boot, jpa, webmvc, junit, moc
 
 
 ## Build
+프로젝트 build 및 run 을 위해 먼저, java 버전이 11 인지 확인 하고, 아니라면 11로 맞추어야 합니다.
+```shell
+java -version
+
+# sdk 패키지 매니저를 이용 한다면 현재 java 버전 확인 및 버전 변경을 할 수 있습니다.
+sdk current java 
+# 11 버전이 없다면 설치 가능
+# sdk install java <JDK_11_Version>
+sdk default java <JDK_11_Version>  
 ```
-mvn package -DskipTests=true
+
+```
+mvn clean package -DskipTests=true
 ```
 
 ## Run
 ```
 mvn spring-boot:run -DskipTests=true
 ```
-
-## Build Image
-```
-docker build -t "userservice-demo:1.0" -f ./cicd/docker/Dockerfile .
-```
-
-### Docker Service UP
-```
-docker-compose -f ./cicd/docker/docker-compose-user.yaml up -d
-```
-
-### Docker Mysql UP
-```
-docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
-
-# Listen port 확인 (MacOS)
-# nc -vc localhost 53306
-```
-
 
 ## Check APIs
 
@@ -93,15 +85,26 @@ curl -v -L -X DELETE 'http://localhost:8080/api/users/4' \
 ```
 
 ## Appendix
-- [h2-console](http://localhost:8080/h2-console/)
+
+### Docker Mysql UP
 ```
-http://localhost:8080/h2-console
+docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
 
-Driver Class: org.h2.Driver
-JDBC URL: jdbc:h2:file:/tmp/data/demo
-User Name: sa
-``` 
+# Listen port 확인 (MacOS)
+# nc -vc localhost 53306
+```
 
+### Build Docker Image
+```
+mvn clean package -DskipTests=true
+
+docker build -t "userservice-demo:1.0" -f ./cicd/docker/Dockerfile .
+```
+
+### Docker Service UP
+```
+docker-compose -f ./cicd/docker/docker-compose-user.yaml up -d
+```
 
 ### Reference Documentation
 For further reference, please consider the following sections:

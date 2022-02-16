@@ -1,7 +1,7 @@
-package com.demo.backend.service
+package example.demo.backend.service
 
-import com.demo.backend.entity.User
-import com.demo.backend.repository.UserRepository
+import example.demo.backend.entity.User
+import example.demo.backend.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Example
