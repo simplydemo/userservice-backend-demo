@@ -6,7 +6,7 @@ pipeline {
         GIT_REPO_BRANCH_NAME='main'
         DOCKER_REGISTRY_PRIVATE='vcixoe45.private-ncr.gov-ntruss.com'
         DOCKER_REGISTRY='alertnow-image-repo.ncr.gov-ntruss.com'
-        IMAGE_NAME='userservice-backend-demo'
+        IMAGE_NAME='userservice-demo'
     }
     options {
         timestamps()
@@ -58,6 +58,26 @@ pipeline {
             }
         }
 
+        stage('argo-deploy') {
+            agent {
+                docker {
+                    image 'quay.io/argoproj/kubectl-argo-rollouts:master'
+                    args "--entrypoint=''"
+                }
+            }
+            steps {
+                sh 'ls -Al'
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfig')]) {
+                    sh 'kubectl-argo-rollouts version'
+                    sh 'kubectl-argo-rollouts get rollout ${IMAGE_NAME} --kubeconfig ${kubeconfig}'
+                    sh 'kubectl-argo-rollouts set image ${IMAGE_NAME} ${IMAGE_NAME}=${DOCKER_REGISTRY_PRIVATE}/${IMAGE_NAME}:${BUILD_NUMBER} --kubeconfig ${kubeconfig}'
+                    sh 'sleep 10; echo "Changed BUILD_NUMBER ......... [${BUILD_NUMBER}]"'
+                    sh 'kubectl-argo-rollouts promote ${IMAGE_NAME} --kubeconfig ${kubeconfig}'
+                    sh 'sleep 10; echo "Promote service routing"'
+                    sh 'kubectl-argo-rollouts get rollout ${IMAGE_NAME} --kubeconfig ${kubeconfig}'
+                }
+            }
+        }
     }
 
     post {
