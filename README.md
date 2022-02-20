@@ -1,7 +1,6 @@
 # user-crud-demo-backend
 Backend combines components such as kotlin, spring-boot, jpa, webmvc, junit, mockk
 
-
 ## Build
 프로젝트 build 및 run 을 위해 먼저, java 버전이 11 인지 확인 하고, 아니라면 11로 맞추어야 합니다.
 ```shell
@@ -102,10 +101,13 @@ docker build -t "userservice-demo:1.0.0" -f ./cicd/docker/Dockerfile .
 
 ### Docker Service UP
 ```
-docker-compose -f ./cicd/docker/docker-compose-user.yaml up -d
+docker-compose -f ./cicd/docker/docker-compose.yaml up -d
+
+# with profile
+# docker-compose -f ./cicd/docker/docker-compose.yaml run userservice -e SPRING_PROFILE=dev
 
 # Down
-# docker-compose -f ./cicd/docker/docker-compose-user.yaml down
+# docker-compose -f ./cicd/docker/docker-compose.yaml down
 ```
 
 ### Reference Documentation

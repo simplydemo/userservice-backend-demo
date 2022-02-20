@@ -1,14 +1,10 @@
 version: '3.1'
 
-networks:
-  runtime-net:
-    external: false
-
 services:
-  mysql:
+  mysql-service:
     restart: always
     image: mysql:5.7.37
-    container_name: mysql
+    container_name: mysql-service
     environment:
       - MYSQL_DATABASE=sample
       - MYSQL_ROOT_PASSWORD=root1234
@@ -23,4 +19,10 @@ services:
       - 53306:3306
     # user: root
     networks:
-      - runtime-net
+      - default
+      - mynet-bridge
+
+networks:
+  mynet-bridge:
+    driver: bridge
+# docker network create --driver bridge --ip-range 172.21.1.0/24 --subnet 172.21.1.0/24 --gateway 172.21.1.1 mynet-bridge

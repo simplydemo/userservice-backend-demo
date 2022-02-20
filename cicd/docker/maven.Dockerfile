@@ -37,3 +37,6 @@ COPY --from=builder application/snapshot-dependencies/ ./
 COPY --from=builder application/spring-boot-loader/ ./
 COPY --from=builder application/application/ ./
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+
+
+docker run --rm -it --net=docker_mynet-bridge ghcr.io/jonlabelle/network-tools:latest

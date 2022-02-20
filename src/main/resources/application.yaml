@@ -1,3 +1,4 @@
+debug: false
 server:
   port: 8080
   servlet:
@@ -9,9 +10,11 @@ logging:
     example.demo.backend: DEBUG
     org.springframework.web: INFO
     org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE
+    org.springframework.jdbc: DEBUG
     org.springframework.kafka: TRACE
     org.apache.kafka: INFO
     org.hibernate: INFO
+    com.mysql.cj.jdbc: INFO
   file:
     name: "target/backend.log"
   logback:
@@ -20,7 +23,7 @@ logging:
 
 spring:
   application:
-    name: userservice
+    name: userservice-demo
   jackson:
     serialization:
       INDENT_OUTPUT: true
@@ -31,8 +34,56 @@ spring:
       - non_default
       - non_empty
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:53306/SAMPLE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: "jdbc:mysql://localhost:3306/SAMPLE?useSSL=false&characterEncoding=UTF-8"
+    username: scott
+    password: scott123$
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      schema-locations: "classpath:sql/schema-mysql.sql"
+      data-locations: "classpath:sql/data.sql"
+  jpa:
+    database: mysql
+    database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: demo
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: "jdbc:mysql://mysql-ingress-svc.datahub:3306/SAMPLE?useSSL=false&characterEncoding=UTF-8"
+    username: scott
+    password: scott123$
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      schema-locations: "classpath:sql/schema-mysql.sql"
+      data-locations: "classpath:sql/data.sql"
+  jpa:
+    database: mysql
+    database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
+logging:
+  file:
+    name: "target/backend.log"
+  logback:
+    rollingpolicy:
+      max-history: 5
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: "jdbc:mysql://mysql-service:3306/sample?useSSL=false&characterEncoding=UTF-8"
     username: scott
     password: tiger123$
     hibernate:
@@ -45,6 +96,12 @@ spring:
   jpa:
     database: mysql
     database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
+logging:
+  file:
+    name: "target/backend.log"
+  logback:
+    rollingpolicy:
+      max-history: 5
 
 ---
 spring:
