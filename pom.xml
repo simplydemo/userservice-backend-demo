@@ -15,7 +15,7 @@
     <description>userservice-backend-demo</description>
     <properties>
         <java.version>11</java.version>
-        <kotlin.version>1.5.31</kotlin.version>
+        <kotlin.version>1.6.10</kotlin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -75,21 +75,31 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>maven-central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-plugins-central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
     <profiles>
         <profile>
-            <id>gov</id>
+            <id>poc</id>
             <properties>
                 <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
                 <!--
-                <sonar.host.url>https://sonarqube.fin.opsnow.com</sonar.host.url>
-                <nexus.host.url>https://nexus.fin.opsnow.com</nexus.host.url>
+                <sonar.host.url>https://your.sonarqube.domain</sonar.host.url>
+                <nexus.host.url>https://your.nexus.domain</nexus.host.url>
                 -->
             </properties>
         </profile>
     </profiles>
-
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
@@ -102,8 +112,10 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>1.5.31</version>
+                <version>1.6.10</version>
                 <configuration>
+                    <nowarn>true</nowarn>
+                    <jvmTarget>11</jvmTarget>
                     <args>
                         <arg>-Xjsr305=strict</arg>
                     </args>
