@@ -1,0 +1,138 @@
+pipeline {
+    environment{
+        GIT_CHECKOUT_URL = 'https://github.com/chiwoo-samples/userservice-backend-demo.git'
+        GIT_BRANCH  = 'main'
+        APP_NAME    = 'userservice-demo'
+        IMAGE_NAME  = 'symplesims/userservice-demo'
+        // DOCKER_REGISTRY = '' docker hub 인경우 DOCKER_REGISTRY 생략
+    }
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  name: userservice-cicd-agent
+  namespace: jenkins
+spec:
+  containers:
+    - name: docker
+      image: docker:20.10.12-alpine3.15
+      command:
+        - cat
+      tty: true
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+          readOnly: true
+    - name: maven
+      image: maven:3.8.4-jdk-11
+      command:
+        - cat
+      tty: true
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: maven-repo
+          mountPath: /root/.m2/repository
+    - name: argo-rollouts
+      image: quay.io/argoproj/kubectl-argo-rollouts:master
+      command:
+        - cat
+      tty: true
+      securityContext:
+        fsGroup: 0
+        runAsUser: 0
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "kubernetes.io/hostname"
+                operator: In
+                values:
+                  - docker-desktop
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+    - name: maven-repo
+      persistentVolumeClaim:
+        claimName: maven-pvc
+'''
+        }
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                deleteDir()
+                sh 'ls -Al'
+                checkout(
+                    [$class: 'GitSCM', branches: [[name: '*/' + env.GIT_BRANCH]],
+                    extensions: [],
+                    userRemoteConfigs: [[credentialsId: 'github-credentials', url: env.GIT_CHECKOUT_URL]]]
+                )
+                sh 'ls -Al'
+            }
+        }
+
+        stage('Build-Maven') {
+            steps {
+                container('maven') {
+                   sh 'mvn clean package -DskipTests=true'
+                   sh 'ls -al ./target/'
+                }
+            }
+        }
+
+        stage('Build-Image') {
+            steps {
+                container('docker') {
+                   sh 'docker build -f ./cicd/docker/Dockerfile -t ${IMAGE_NAME}:${BUILD_NUMBER} -t ${IMAGE_NAME}:latest .'
+                }
+            }
+        }
+
+        stage('Upload-Image') {
+            steps {
+                container('docker') {
+
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_ID', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'echo "${PASSWORD}" | docker login --username ${USERNAME} --password-stdin'
+                        sh 'docker push ${IMAGE_NAME}:${BUILD_NUMBER}'
+                        sh 'docker push ${IMAGE_NAME}:latest'
+                    }
+
+                }
+            }
+        }
+
+        stage('Deploy-argo') {
+            steps {
+                container('argo-rollouts') {
+                    withCredentials([file(credentialsId: 'local-kubeconfig', variable: 'kubeconfig')]) {
+                        sh 'kubectl-argo-rollouts get rollout ${APP_NAME} -n default --kubeconfig ${kubeconfig}'
+                        sh 'kubectl-argo-rollouts set image ${APP_NAME} ${APP_NAME}=${IMAGE_NAME}:${BUILD_NUMBER} -n default --kubeconfig ${kubeconfig}'
+                        sh 'sleep 2; echo "Changed BUILD_NUMBER = ${BUILD_NUMBER}"'
+                        sh 'kubectl-argo-rollouts promote ${APP_NAME} --full -n default --kubeconfig ${kubeconfig}'
+                        sh 'sleep 20; echo "Promote service routing"'
+                        sh 'kubectl-argo-rollouts get rollout ${APP_NAME} -n default --kubeconfig ${kubeconfig}'
+                    }
+                }
+            }
+        }
+
+        stage('Report') {
+            steps {
+                sh 'echo "HOME: ${HOME}"'
+                sh 'echo "pwd: $(pwd)"'
+                sh 'echo "BUILD_NUMBER: ${BUILD_NUMBER}"'
+            }
+        }
+    }
+
+}
