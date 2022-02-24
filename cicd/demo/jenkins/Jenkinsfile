@@ -7,7 +7,67 @@ pipeline {
     }
     agent {
         kubernetes {
-            yamlFile 'cicd/demo/jenkins/agents/kube-agent-default.yaml'
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dx-agent-userservice
+  namespace: jenkins
+spec:
+  containers:
+    - name: docker
+      image: docker:20.10.12-alpine3.15
+      command:
+        - cat
+      tty: true
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+          readOnly: true
+    - name: maven
+      image: maven:3.8.4-jdk-11
+      command:
+        - cat
+      tty: true
+      securityContext:
+        privileged: true
+      resources:
+        limits:
+          memory: "2Gi"
+          cpu: "4000m"
+        requests:
+          memory: "1Gi"
+          cpu: "2000m"
+      volumeMounts:
+        - name: maven-repo
+          mountPath: /root/.m2/repository
+    - name: argo-rollouts
+      image: quay.io/argoproj/kubectl-argo-rollouts:master
+      command:
+        - cat
+      tty: true
+      securityContext:
+        fsGroup: 0
+        runAsUser: 0
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "kubernetes.io/hostname"
+                operator: In
+                values:
+                  - docker-desktop
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+    - name: maven-repo
+      persistentVolumeClaim:
+        claimName: maven-pvc
+'''
         }
     }
 
@@ -60,12 +120,11 @@ pipeline {
         stage('Deploy-argo') {
             steps {
                 container('argo-rollouts') {
-                    withCredentials([file(credentialsId: 'local-kubeconfig', variable: 'kubeconfig')]) {
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfig')]) {
                         sh 'kubectl-argo-rollouts get rollout ${APP_NAME} -n default --kubeconfig ${kubeconfig}'
                         sh 'kubectl-argo-rollouts set image ${APP_NAME} ${APP_NAME}=${IMAGE_NAME}:${BUILD_NUMBER} -n default --kubeconfig ${kubeconfig}'
-                        sh 'sleep 2; echo "Changed BUILD_NUMBER = ${BUILD_NUMBER}"'
                         sh 'kubectl-argo-rollouts promote ${APP_NAME} --full -n default --kubeconfig ${kubeconfig}'
-                        sh 'sleep 20; echo "Promote service routing"'
+                        sh 'sleep 10;'
                         sh 'kubectl-argo-rollouts get rollout ${APP_NAME} -n default --kubeconfig ${kubeconfig}'
                     }
                 }
