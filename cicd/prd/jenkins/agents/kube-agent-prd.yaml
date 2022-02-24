@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: userservice-cicd-agent
+  namespace: default
+spec:
+  containers:
+    - name: docker
+      image: "docker:20.10.12-alpine3.15"
+      command:
+        - cat
+      tty: true
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+          readOnly: true
+    - name: maven
+      image: "maven:3-jdk-11-slim"
+      command:
+        - cat
+      tty: true
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: jenkins-repo
+          mountPath: /var/jenkins_repo
+    - name: busybox
+      image: busybox
+      command:
+        - cat
+      tty: true
+      env:
+        - name: CONTAINER_ENV_VAR
+          value: busybox
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+    - name: jenkins-repo
+      hostPath:
+        path: /var/jenkins_repo
+        type: Directory
