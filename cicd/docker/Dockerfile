@@ -18,3 +18,5 @@ ENV JAVA_OPTS="$JAVA_OPTS -Dsun.misc.URLClassPath.disableJarChecking=true"
 EXPOSE 8080
 
 ENTRYPOINT exec java $JAVA_OPTS -Dspring.profiles.active=${SPRING_PROFILE} -jar spring-app.jar
+
+# docker build -t symplesims/userservice-demo:latest .

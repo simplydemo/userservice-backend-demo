@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: userservice-demo
+  namespace: default
 spec:
   replicas: 1
   revisionHistoryLimit: 5
@@ -32,7 +33,7 @@ spec:
                     values:
                       - linux
       imagePullSecrets:
-        - name: regcred-docker-hub
+        - name: chiwoo-docker-hub
   strategy:
     blueGreen:
       activeService: userservice-demo-active
