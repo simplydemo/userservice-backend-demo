@@ -26,12 +26,12 @@ mvn spring-boot:run -DskipTests=true
 
 ### query
 ```
-curl -v -L -X GET http://localhost:8080/api/users/query
+curl -v -L -X GET http://localhost:8080/api/v1/users/query
 ```
 
 ### users-add
 ```
-curl -v -L  -X POST 'http://localhost:8080/api/users' \
+curl -v -L  -X POST 'http://localhost:8080/api/v1/users' \
 -H 'Content-Type: application/json' -H 'Authorization: Bearer {token}' \
 --data-raw '{
     "firstName": "scott2",
@@ -45,19 +45,19 @@ curl -v -L  -X POST 'http://localhost:8080/api/users' \
 
 ### users-find-all
 ```
-curl -v -L -X GET 'http://localhost:8080/api/users' \
+curl -v -L -X GET 'http://localhost:8080/api/v1/users' \
  -H 'Content-Type: application/json' -H 'Authorization: Bearer {token}' 
 ```
 
 ### users-find-by-id
 ```
-curl -v -L -X GET 'http://localhost:8080/api/users/1' \
+curl -v -L -X GET 'http://localhost:8080/api/v1/users/1' \
  -H 'Content-Type: application/json' -H 'Authorization: Bearer {token}' 
 ```
 
 ### users-modify
 ```
-curl -v -L -X PUT 'http://localhost:8080/api/users/3' \
+curl -v -L -X PUT 'http://localhost:8080/api/v1/users/3' \
  -H 'Content-Type: application/json' -H 'Authorization: Bearer {token}' \
  --data-raw '{
     "id": 3,
@@ -72,14 +72,14 @@ curl -v -L -X PUT 'http://localhost:8080/api/users/3' \
 
 ### users-find-by-query
 ```
-curl -v -L -X GET 'http://localhost:8080/api/users/query?lastName=Fruit&title=mr&email=farm&role=manager' \
+curl -v -L -X GET 'http://localhost:8080/api/v1/users/query?lastName=Fruit&title=mr&email=farm&role=manager' \
 -H 'Content-Type: application/json' -H 'Authorization: Bearer {token}'
 ```
 
 
 ### users-delete
 ```
-curl -v -L -X DELETE 'http://localhost:8080/api/users/4' \
+curl -v -L -X DELETE 'http://localhost:8080/api/v1/users/4' \
 -H 'Content-Type: application/json' -H 'Authorization: Bearer {token}'
 ```
 

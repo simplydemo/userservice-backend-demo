@@ -15,7 +15,7 @@ class UserController @Autowired constructor(val userService: UserService) {
 
     companion object {
         private val log = LoggerFactory.getLogger(UserController::class.java)
-        const val BASE_URI = "/api/users"
+        const val BASE_URI = "/api/v1/users"
     }
 
     @GetMapping(BASE_URI)
