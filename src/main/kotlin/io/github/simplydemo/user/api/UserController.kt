@@ -17,12 +17,22 @@ class UserController @Autowired constructor(val userService: UserService) {
     companion object {
         private val log = LoggerFactory.getLogger(UserController::class.java)
         const val BASE_URI = "/api/v1/users"
-        const val size = 10
+    }
+
+    private fun pageRequest(page: Int?, size: Int?): PageRequest? {
+        return page?.takeIf { it >= 0 }?.let { validPage ->
+            size?.takeIf { it > 0 }?.let { validSize ->
+                PageRequest.of(validPage, validSize)
+            }
+        }
     }
 
     @GetMapping(BASE_URI)
-    fun findAll(@RequestParam(name = "page", required = false) page: Int?): ResponseEntity<List<User>> {
-        val pageRequest = page?.let { PageRequest.of(it, size) }
+    fun findAll(
+        @RequestParam(name = "page", required = false) page: Int?,
+        @RequestParam(name = "size", required = false) size: Int?,
+    ): ResponseEntity<List<User>> {
+        val pageRequest = pageRequest(page, size)
         if (pageRequest != null) {
             val users = userService.findAll(pageRequest)
             return ResponseEntity.ok(users.content)
