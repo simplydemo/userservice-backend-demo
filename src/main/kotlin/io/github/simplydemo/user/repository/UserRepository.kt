@@ -1,6 +1,6 @@
-package example.demo.backend.repository
+package io.github.simplydemo.user.repository
 
-import example.demo.backend.entity.User
+import io.github.simplydemo.user.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

@@ -1,6 +1,6 @@
-package example.demo.backend.service
+package io.github.simplydemo.user.service
 
-import example.demo.backend.entity.User
+import io.github.simplydemo.user.entity.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.MethodOrderer

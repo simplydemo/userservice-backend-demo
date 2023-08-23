@@ -1,4 +1,4 @@
-package example.demo.backend
+package io.github.simplydemo.user
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

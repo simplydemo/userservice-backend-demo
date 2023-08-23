@@ -1,7 +1,8 @@
-package example.demo.backend.entity
+package io.github.simplydemo.user.entity
 
+import jakarta.persistence.*
 import java.time.LocalDateTime
-import javax.persistence.*
+
 
 @Entity
 @Table(name = "users")
@@ -28,11 +29,11 @@ class User(
     var createDts: LocalDateTime? = null,
 
     @Column(name = "update_dts")
-    var updateDts: LocalDateTime? = null
+    var updateDts: LocalDateTime? = null,
 ) {
 
     constructor(
-        firstName: String, lastName: String, email: String, role: String, title: String?, usercode: String?
+        firstName: String, lastName: String, email: String, role: String, title: String?, usercode: String?,
     ) : this(null, firstName, lastName, email, role, title, usercode)
 
     class Builder {

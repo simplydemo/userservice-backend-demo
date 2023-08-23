@@ -1,7 +1,7 @@
-package example.demo.backend.api
+package io.github.simplydemo.user.api
 
-import example.demo.backend.entity.User
-import example.demo.backend.service.UserService
+import io.github.simplydemo.user.entity.User
+import io.github.simplydemo.user.service.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every

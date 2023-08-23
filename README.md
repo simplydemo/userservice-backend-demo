@@ -2,15 +2,15 @@
 Backend combines components such as kotlin, spring-boot, jpa, webmvc, junit, mockk
 
 ## Build
-프로젝트 build 및 run 을 위해 먼저, java 버전이 11 인지 확인 하고, 아니라면 11로 맞추어야 합니다.
+프로젝트 build 및 run 을 위해 먼저 jdk-17 버전을 준비합니다.
 ```shell
 java -version
 
 # sdk 패키지 매니저를 이용 한다면 현재 java 버전 확인 및 버전 변경을 할 수 있습니다.
 sdk current java 
-# 11 버전이 없다면 설치 가능
-# sdk install java <JDK_11_Version>
-sdk default java <JDK_11_Version>  
+# 17 버전이 없다면 설치 가능
+# sdk install java <JDK_17_Version>
+sdk default java <JDK_17_Version>  
 ```
 
 ```
@@ -89,15 +89,22 @@ curl -v -L -X DELETE 'http://localhost:8080/api/users/4' \
 ```
 docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
 
-# Listen port 확인 (MacOS)
+# Listen port 확인 (by netcat)
 # nc -vc localhost 53306
+```
+### Docker H2 UP
+```
+docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
+
+# Listen port 확인 (by netcat)
+# nc -vc localhost 1521
 ```
 
 ### Build Docker Image
 ```
 mvn clean package -DskipTests=true
 
-docker build -t "userservice-demo:1.0.0" -f ./cicd/docker/Dockerfile .
+docker build -t "userservice:1.0.0" -f ./cicd/docker/Dockerfile .
 
 ### Docker Service UP
 ```

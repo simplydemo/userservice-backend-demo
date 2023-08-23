@@ -1,7 +1,7 @@
-package example.demo.backend.api
+package io.github.simplydemo.user.api
 
-import example.demo.backend.entity.User
-import example.demo.backend.service.UserService
+import io.github.simplydemo.user.entity.User
+import io.github.simplydemo.user.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

@@ -3,20 +3,10 @@ version: "3"
 
 services:
   userservice:
-    image: userservice-demo:1.0.0
-    container_name: userservice-demo-active
+    image: userservice:1.0.0
+    container_name: userservice
     restart: always
     ports:
       - 8080:8080
     environment:
-      - SPRING_PROFILE=dev
-    networks:
-      - default
-      - mynet-bridge
-
-networks:
-  mynet-bridge:
-    driver: bridge
-
-# docker network ls
-# docker network create --driver bridge --ip-range 172.21.1.0/24 --subnet 172.21.1.0/24 --gateway 172.21.1.1 mynet-bridge
+      - SPRING_PROFILE=h2

@@ -1,6 +1,6 @@
 package simple
 
-import example.demo.backend.entity.User
+import io.github.simplydemo.user.entity.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import org.assertj.core.api.Assertions.assertThat

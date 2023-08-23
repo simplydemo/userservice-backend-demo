@@ -1,6 +1,6 @@
-package example.demo.backend.repository
+package io.github.simplydemo.user.repository
 
-import example.demo.backend.entity.User
+import io.github.simplydemo.user.entity.User
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
