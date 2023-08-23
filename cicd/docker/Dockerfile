@@ -1,5 +1,4 @@
-# Loads a Slim Alpine JDK11 Base Image
-FROM adoptopenjdk/openjdk11:alpine-slim
+FROM amazoncorretto:17-alpine3.18-jdk
 
 WORKDIR apps
 
@@ -19,4 +18,5 @@ EXPOSE 8080
 
 ENTRYPOINT exec java $JAVA_OPTS -Dspring.profiles.active=${SPRING_PROFILE} -jar spring-app.jar
 
-# docker build -t symplesims/userservice-demo:latest .
+# docker build -t symplesims/user-service:loc-1.0 .
+# docker build -t symplesims/user-service:loc-1.0 -f ./cicd/docker/Dockerfile .

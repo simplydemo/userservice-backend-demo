@@ -3,10 +3,21 @@ version: "3"
 
 services:
   userservice:
-    image: userservice:1.0.0
-    container_name: userservice
+    image: symplesims/user-service:loc-1.0
+    container_name: user-service
     restart: always
     ports:
       - 8080:8080
     environment:
       - SPRING_PROFILE=h2
+    #network_mode: bridge
+    networks:
+      - my-bridge
+
+networks:
+  my-bridge:
+    driver: bridge
+
+# docker-compose -f ./docker-compose.yaml up -d
+# docker-compose -f ./docker-compose.yaml down
+

@@ -23,7 +23,7 @@ logging:
 
 spring:
   application:
-    name: userservice-demo
+    name: user-service
   jackson:
     serialization:
       INDENT_OUTPUT: true
@@ -34,10 +34,10 @@ spring:
       - non_default
       - non_empty
   datasource:
-    driver-class-name: "com.mysql.cj.jdbc.Driver"
-    url: "jdbc:mysql://localhost:3306/SAMPLE?useSSL=false&characterEncoding=UTF-8"
-    username: scott
-    password: tiger123$
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://mysql-svc:3306/demo?useSSL=false&characterEncoding=UTF-8"
+    username: admin
+    password: admin1234
     hibernate:
       ddl-auto: none
   sql:
@@ -56,8 +56,8 @@ spring:
     activate:
       on-profile: h2
   datasource:
-    driver-class-name: "org.h2.Driver"
-    url: "jdbc:h2:tcp://localhost:1521/test"
+    driver-class-name: org.h2.Driver
+    url: "jdbc:h2:tcp://h2-svc:1521/test"
     username: sa
     password:
     hibernate:
@@ -75,12 +75,12 @@ spring:
 spring:
   config:
     activate:
-      on-profile: demo
+      on-profile: mysql
   datasource:
-    driver-class-name: "com.mysql.cj.jdbc.Driver"
-    url: "jdbc:mysql://mysql-svc.cs:3306/SAMPLE?useSSL=false&characterEncoding=UTF-8"
-    username: scott
-    password: tiger123$
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://mysql-svc:3306/demo?useSSL=false&characterEncoding=UTF-8"
+    username: admin
+    password: admin1234
     hibernate:
       ddl-auto: none
   sql:
@@ -106,8 +106,8 @@ spring:
   datasource:
     driver-class-name: "com.mysql.cj.jdbc.Driver"
     url: "jdbc:mysql://mysql-service:3306/sample?useSSL=false&characterEncoding=UTF-8"
-    username: scott
-    password: tiger123$
+    username: admin
+    password: admin1234
     hibernate:
       ddl-auto: none
   sql:
@@ -131,10 +131,10 @@ spring:
     activate:
       on-profile: prd
   datasource:
-    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://db-t32q-kr1.vpc-cdb.gov-ntruss.com:3306/SAMPLE?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
-    username: scott
-    password: tiger123$
+    username: admin
+    password: admin1234
     hibernate:
       ddl-auto: none
   sql:

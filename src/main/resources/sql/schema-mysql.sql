@@ -1,3 +1,8 @@
+CREATE DATABASE IF NOT EXISTS demo;
+
+CREATE USER 'admin'@'%' IDENTIFIED BY 'admin1234';
+GRANT ALL ON demo.* TO 'admin'@'%';
+
 create table if not exists users
 (
     id         int(8) AUTO_INCREMENT,

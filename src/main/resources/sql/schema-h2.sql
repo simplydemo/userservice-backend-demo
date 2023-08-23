@@ -11,6 +11,3 @@ CREATE TABLE IF NOT EXISTS users
     update_dts timestamp null,
     primary key (id)
 );
-
-
-CREATE TABLE IF NOT EXISTS TEST(ID INT PRIMARY KEY, NAME VARCHAR(255));

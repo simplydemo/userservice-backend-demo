@@ -94,7 +94,7 @@ docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
 ```
 ### Docker H2 UP
 ```
-docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
+docker-compose -f ./cicd/docker/docker-compose-h2.yaml up -d
 
 # Listen port 확인 (by netcat)
 # nc -vc localhost 1521
@@ -104,14 +104,13 @@ docker-compose -f ./cicd/docker/docker-compose-mysql.yaml up -d
 ```
 mvn clean package -DskipTests=true
 
-docker build -t "userservice:1.0.0" -f ./cicd/docker/Dockerfile .
+docker build -t symplesims/user-service:loc-1.0 -f ./cicd/docker/Dockerfile .
 
 ### Docker Service UP
-```
 docker-compose -f ./cicd/docker/docker-compose.yaml up -d
 
 # with profile
-# docker-compose -f ./cicd/docker/docker-compose.yaml run userservice -e SPRING_PROFILE=dev
+# docker-compose -f ./cicd/docker/docker-compose.yaml run user-service -e SPRING_PROFILE=dev
 
 # Down
 # docker-compose -f ./cicd/docker/docker-compose.yaml down

@@ -2,27 +2,29 @@ version: '3.1'
 
 services:
   mysql-service:
-    restart: always
     image: mysql:5.7.37
-    container_name: mysql-service
+    container_name: mysql-svc
+    restart: always
     environment:
-      - MYSQL_DATABASE=sample
-      - MYSQL_ROOT_PASSWORD=root1234
+      - MYSQL_DATABASE=demo
+      - MYSQL_ROOT_PASSWORD=admin1234
       - TZ=Asia/Seoul
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --lower_case_table_names=1
-    volumes:
-      - /tmp/data/mysql:/var/lib/mysql
-    ports:
-      - 53306:3306
-    # user: root
+    # network_mode: bridge
     networks:
-      - default
-      - mynet-bridge
+      - my-bridge
+    volumes:
+      - /Users/Shared/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
 
 networks:
-  mynet-bridge:
+  my-bridge:
     driver: bridge
+
+# use case for custom network
+# docker network create --driver bridge mybridge
 # docker network create --driver bridge --ip-range 172.21.1.0/24 --subnet 172.21.1.0/24 --gateway 172.21.1.1 mynet-bridge
