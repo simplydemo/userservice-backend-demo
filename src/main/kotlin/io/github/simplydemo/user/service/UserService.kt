@@ -5,9 +5,10 @@ import io.github.simplydemo.user.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Example
-
 import org.springframework.data.domain.ExampleMatcher
 import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.*
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
@@ -41,6 +42,10 @@ class UserService @Autowired constructor(val userRepository: UserRepository) {
 
     fun findAll(): List<User> {
         return userRepository.findAll()
+    }
+
+    fun findAll(pageable: Pageable): Page<User> {
+        return userRepository.findAll(pageable)
     }
 
     fun findAllByMatcher(user: User): List<User> {

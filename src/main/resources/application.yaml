@@ -1,25 +1,19 @@
 debug: false
 server:
   port: 8080
-  servlet:
-    context-path: /
 
 logging:
   level:
     root: INFO
-    example.demo.backend: DEBUG
+    io.github.simplydemo: DEBUG
     org.springframework.web: INFO
     org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE
     org.springframework.jdbc: DEBUG
     org.springframework.kafka: TRACE
     org.apache.kafka: INFO
     org.hibernate: INFO
-    com.mysql.cj.jdbc: INFO
   file:
     name: "target/backend.log"
-  logback:
-    rollingpolicy:
-      max-history: 7
 
 spring:
   application:
@@ -33,22 +27,23 @@ spring:
       - non_absent
       - non_default
       - non_empty
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://mysql-svc:3306/demo?useSSL=false&characterEncoding=UTF-8"
-    username: admin
-    password: admin1234
-    hibernate:
-      ddl-auto: none
-  sql:
-    init:
-      mode: always
-      schema-locations: "classpath:sql/schema-mysql.sql"
-      data-locations: "classpath:sql/data.sql"
-  jpa:
-    database: mysql
-    database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
 
+---
+server:
+  port: 8090
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: "jdbc:h2:tcp://localhost:1521/test"
+    username: sa
+    password:
+  jpa:
+    database: h2
+    database-platform: "org.hibernate.dialect.H2Dialect"
 
 ---
 spring:
@@ -148,6 +143,3 @@ spring:
 logging:
   file:
     name: "/tmp/apps/user-service.log"
-  logback:
-    rollingpolicy:
-      max-history: 7

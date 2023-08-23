@@ -4,6 +4,7 @@ import io.github.simplydemo.user.entity.User
 import io.github.simplydemo.user.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -16,12 +17,17 @@ class UserController @Autowired constructor(val userService: UserService) {
     companion object {
         private val log = LoggerFactory.getLogger(UserController::class.java)
         const val BASE_URI = "/api/v1/users"
+        const val size = 10
     }
 
     @GetMapping(BASE_URI)
-    fun findAll(): ResponseEntity<List<User>> {
+    fun findAll(@RequestParam(name = "page", required = false) page: Int?): ResponseEntity<List<User>> {
+        val pageRequest = page?.let { PageRequest.of(it, size) }
+        if (pageRequest != null) {
+            val users = userService.findAll(pageRequest)
+            return ResponseEntity.ok(users.content)
+        }
         val users = userService.findAll()
-        log.info("users.size: {}", users.size)
         return ResponseEntity.ok(users)
     }
 
@@ -32,7 +38,7 @@ class UserController @Autowired constructor(val userService: UserService) {
         @RequestParam(name = "lastName", required = false) lastName: String?,
         @RequestParam(name = "email", required = false) email: String?,
         @RequestParam(name = "role", required = false) role: String?,
-        @RequestParam(name = "title", required = false) title: String?
+        @RequestParam(name = "title", required = false) title: String?,
     ): ResponseEntity<List<User>> {
         val user = User.Builder().id(id).firstName(firstName).lastName(lastName)
             .email(email).role(role).title(title).build()
