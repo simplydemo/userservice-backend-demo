@@ -16,7 +16,8 @@ services:
 
 networks:
   my-bridge:
-    driver: bridge
+    external:
+      name: docker_my-bridge
 
 # docker-compose -f ./docker-compose.yaml up -d
 # docker-compose -f ./docker-compose.yaml down

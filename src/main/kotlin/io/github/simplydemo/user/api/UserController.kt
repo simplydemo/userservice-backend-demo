@@ -22,7 +22,7 @@ class UserController @Autowired constructor(val userService: UserService) {
     private fun pageRequest(page: Int?, size: Int?): PageRequest? {
         return page?.takeIf { it >= 0 }?.let { validPage ->
             size?.takeIf { it > 0 }?.let { validSize ->
-                PageRequest.of(validPage, validSize)
+                PageRequest.of(validPage - 1, validSize)
             }
         }
     }
